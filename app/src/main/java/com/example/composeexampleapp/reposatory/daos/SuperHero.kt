@@ -11,10 +11,10 @@ data class SuperHero(
     @SerializedName("thumbnail") var thumbnail: Thumbnail? = Thumbnail(),
     var isLiked: Boolean? = false,
     var isDisLiked: Boolean? = false,
-   /* @SerializedName("resourceURI") var resourceURI: String? = null,
+    @SerializedName("resourceURI") var resourceURI: String? = null,
     @SerializedName("comics") var comics: Comics? = Comics(),
     @SerializedName("series") var series: Series? = Series(),
     @SerializedName("stories") var stories: Stories? = Stories(),
     @SerializedName("events") var events: Events? = Events(),
-    @SerializedName("urls") var urls: ArrayList<Urls> = arrayListOf()*/
+    @SerializedName("urls") var urls: ArrayList<Urls> = arrayListOf()
 )

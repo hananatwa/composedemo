@@ -17,8 +17,9 @@ lifecycleViewmodelKtx="2.8.1"
 runtimeLivedata = "1.6.7"
 coilCompose="2.1.0"
 accompanistGlide="1.0.0-beta01"
-coil="2.1.0"
+navigationCompose="2.7.7"
 accompanistFlowlayout="0.24.13-rc"
+composeMaterial="1.6.7"
 
 
 [libraries]
@@ -44,7 +45,9 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
+
 accompanist-glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "accompanistGlide" }
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
 
