@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.compose)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.accompanist.flowlayout)
     implementation(libs.squareup.retrofit2)
     implementation(libs.squareup.retrofit2.converter.gson)
     implementation(libs.kotlinx.coroutines.android)

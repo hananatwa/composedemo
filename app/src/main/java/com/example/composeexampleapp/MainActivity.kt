@@ -1,15 +1,15 @@
 package com.example.composeexampleapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,8 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import androidx.compose.ui.text.font.FontWeight
 import coil.request.ImageRequest
 import com.example.composeexampleapp.reposatory.daos.SuperHero
 import com.example.composeexampleapp.viewModel.LocationsViewModel
@@ -56,65 +56,71 @@ class MainActivity : ComponentActivity() {
 fun CharacterListScreen(viewModel: LocationsViewModel = viewModel()) {
     val characters by viewModel.characters.observeAsState(emptyList())
 
-    LazyColumn {
-        items(characters) { character ->
-            CharacterItem(character)
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(characters.size) { character ->
+            CharacterItem(characters[character])
         }
     }
 }
 
 @Composable
 fun CharacterItem(character: SuperHero) {
-    val imageUrl = "${character.thumbnail?.path ?: ""}.${character.thumbnail?.extension ?: ""}"
-
-    val imageState = rememberAsyncImagePainter(
+    val imageUrl =
+        "${character.thumbnail?.path ?: ""}.${character.thumbnail?.extension ?: ""}".replace(
+            "http://",
+            "https://"
+        )
+    val painter = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
-            .data("http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860.jpg")
+            .data(imageUrl)
+            .crossfade(true)
             .build()
-    ).state
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        character.name?.let { Text(text = it) }
-        character.description?.let { Text(text = it) }
+    )
 
-        Image(
+
+    Card(
+        modifier = Modifier.padding(8.dp), elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(6.dp)
-                .height(200.dp)
-                .background(Color.Red)
-                .clip(RoundedCornerShape(22.dp)),
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            painter = rememberAsyncImagePainter(model = "http://i.annihil.us/u/prod/marvel/i/mg/a/f0/5202887448860.jpg"),
-            contentDescription = "movie.title",
-            contentScale = ContentScale.Crop
-        )
+            character.name?.let {
+                Text(
+                    text = it,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
+            character.description?.let {
+                Text(
+                    text = it,
+                    fontSize = 16.sp,
+                    maxLines = 2,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+            }
 
-        if (imageState is AsyncImagePainter.State.Loading){
-            Log.i("loading", "CharacterItem: ")
-
-        }
-        if (imageState is AsyncImagePainter.State.Success) {
-
-           /* Image(
+            Image(
+                painter = painter,
+                contentDescription = character.name,
+                contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(6.dp)
-                    .height(200.dp)
-                    .background(Color.Red)
-                    .clip(RoundedCornerShape(22.dp)),
+                    .size(200.dp)
+                    .clip(RoundedCornerShape(25.dp))
+            )
 
-                painter = rememberImagePainter(data = imageUrl),
-                contentDescription = "movie.title",
-                contentScale = ContentScale.Crop
-            )*/
+
         }
-
-        Log.i("Image22", "CharacterItem: $imageUrl")
-
     }
 }
 
