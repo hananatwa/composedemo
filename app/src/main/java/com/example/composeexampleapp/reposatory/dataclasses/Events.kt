@@ -1,4 +1,4 @@
-package com.example.composeexampleapp.reposatory.daos
+package com.example.composeexampleapp.reposatory.dataclasses
 
 import com.google.gson.annotations.SerializedName
 

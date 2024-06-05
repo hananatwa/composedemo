@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
 }
 
 android {
@@ -8,7 +9,6 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.composeexampleapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -71,6 +71,10 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.accompanist.glide)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,6 +1,6 @@
 package com.example.composeexampleapp.reposatory.retrofit
 
-import com.example.composeexampleapp.reposatory.daos.MarvelData
+import com.example.composeexampleapp.reposatory.dataclasses.MarvelData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

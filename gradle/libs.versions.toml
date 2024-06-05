@@ -20,6 +20,8 @@ accompanistGlide="1.0.0-beta01"
 navigationCompose="2.7.7"
 accompanistFlowlayout="0.24.13-rc"
 composeMaterial="1.6.7"
+room = "2.6.1"
+kapt ="1.8.0"
 
 
 [libraries]
@@ -47,6 +49,10 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 
 accompanist-glide = { group = "com.github.bumptech.glide", name = "compose", version.ref = "accompanistGlide" }
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanistFlowlayout" }
@@ -54,4 +60,5 @@ accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinKapt = { id = "kotlin.kapt", version.ref = "kotlin" }
 

@@ -77,7 +77,6 @@ fun SuperHeroDetailsScreen( viewModel: SuperHeroDetailsViewModel = viewModel()) 
             }
         }
     } ?: run {
-        // Show a loading state or placeholder if character is null
         Text(text = "Loading...")
     }
 }

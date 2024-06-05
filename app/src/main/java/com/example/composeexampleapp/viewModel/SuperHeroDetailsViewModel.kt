@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composeexampleapp.helpers.Constants
-import com.example.composeexampleapp.reposatory.daos.SuperHero
+import com.example.composeexampleapp.reposatory.dataclasses.SuperHero
 import com.example.composeexampleapp.reposatory.retrofit.RetrofitBuilder
 import kotlinx.coroutines.launch
 
