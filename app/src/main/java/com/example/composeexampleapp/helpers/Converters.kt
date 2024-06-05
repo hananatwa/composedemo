@@ -2,7 +2,12 @@ package com.example.composeexampleapp.helpers
 
 
 import androidx.room.TypeConverter
-import com.example.composeexampleapp.reposatory.dataclasses.*
+import com.example.composeexampleapp.model.dataclasses.Comics
+import com.example.composeexampleapp.model.dataclasses.Events
+import com.example.composeexampleapp.model.dataclasses.Series
+import com.example.composeexampleapp.model.dataclasses.Stories
+import com.example.composeexampleapp.model.dataclasses.Thumbnail
+import com.example.composeexampleapp.model.dataclasses.Urls
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

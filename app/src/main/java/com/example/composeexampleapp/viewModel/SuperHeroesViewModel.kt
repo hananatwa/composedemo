@@ -1,36 +1,40 @@
 package com.example.composeexampleapp.viewModel
 
-import android.content.Context
-import android.net.ConnectivityManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composeexampleapp.helpers.Constants
-import com.example.composeexampleapp.reposatory.dataclasses.SuperHero
-import com.example.composeexampleapp.reposatory.retrofit.RetrofitBuilder
-import com.example.composeexampleapp.room.dao.SuperHeroDao
-import com.example.composeexampleapp.room.database.SuperheroDatabase
-import com.example.composeexampleapp.views.SuperHeroesApplication
+import com.example.composeexampleapp.helpers.CheckNetworkConnection
+import com.example.composeexampleapp.model.repository.HeroesRepository
+import com.example.composeexampleapp.model.dataclasses.SuperHero
+import com.example.composeexampleapp.model.dataclasses.HeroesScreenState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SuperHeroesViewModel : ViewModel() {
 
-    private val _superHeroes = MutableLiveData<List<SuperHero>>()
-    val characters: LiveData<List<SuperHero>> get() = _superHeroes
+    var heroesScreenState by mutableStateOf(
+        HeroesScreenState(
+            heroes = emptyList(),
+            loading = true
+        )
+    )
+        private set
 
-    private val _likedSuperHeroes = MutableLiveData<List<SuperHero>>()
-    val likedSuperHeroes: LiveData<List<SuperHero>> get() = _likedSuperHeroes
+    var likedSuperHeroes by mutableStateOf(HeroesScreenState(heroes = emptyList(), loading = true))
+        private set
 
-    private val _disLikedSuperHeroes = MutableLiveData<List<SuperHero>>()
-    val disLikedSuperHeroes: LiveData<List<SuperHero>> get() = _disLikedSuperHeroes
+    var disLikedSuperHeroes by mutableStateOf(
+        HeroesScreenState(
+            heroes = emptyList(),
+            loading = true
+        )
+    )
+        private set
 
-    private val context = SuperHeroesApplication.getApplicationContext()
-    private var heroesDao: SuperHeroDao = SuperheroDatabase.getDBInstance(context)
-
-    var errorMessage: MutableLiveData<String> = MutableLiveData("")
+    private val heroesRepository = HeroesRepository()
 
     init {
         getSuperHeroes()
@@ -38,67 +42,68 @@ class SuperHeroesViewModel : ViewModel() {
 
     private fun getSuperHeroes() {
         viewModelScope.launch {
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val activeNetwork = connectivityManager.activeNetworkInfo
+            heroesScreenState = heroesScreenState.copy(loading = true)
+
             withContext(Dispatchers.IO) {
-                if (heroesDao.getAllSuperHeroes().isEmpty()) {
-                    if (activeNetwork != null) {
-                        if (activeNetwork.isConnectedOrConnecting)
-                            try {
-                                val response = RetrofitBuilder.instance.getSuperHeroes(
-                                    Constants.TS,
-                                    Constants.API_KEY,
-                                    Constants.HASH_KEY
-                                )
-                                if (response.isSuccessful && response.body() != null) {
-                                    val myResponse = response.body()?.data?.results
-                                    if (myResponse != null) {
-                                        heroesDao.insertAllSuperHeroes(myResponse)
-                                    }
-                                }
-                            } catch (error: Error) {
-                                errorMessage.value = error.message.toString()
+                if (heroesRepository.getSuperHeroesFromRoom().isEmpty()) {
 
-                            }
-                    } else {
-                        errorMessage.value = "Connect to the network and try again please"
+                    if (CheckNetworkConnection().isNetworkAvailable()) {
+                        try {
+                            heroesRepository.getSuperHeroesFromAPIAndInsertIntoRoom()
+                            heroesScreenState = heroesScreenState.copy(loading = false)
+
+                        } catch (error: Error) {
+                            heroesScreenState =
+                                heroesScreenState.copy(error = error.message.toString())
+
+                        }
                     }
-                }
-            }
-            _superHeroes.postValue(heroesDao.getAllSuperHeroes())
-        }
+                } else {
+                    heroesScreenState =
+                        heroesScreenState.copy(error = "Connect to the network and try again please")
 
+                }
+
+            }
+            heroesScreenState =
+                heroesScreenState.copy(heroes = heroesRepository.getSuperHeroesFromRoom())
+        }
     }
+
 
     fun updateLiked(superHero: SuperHero) {
         viewModelScope.launch(Dispatchers.IO) {
-            heroesDao.updateLiked(superHero)
+            heroesRepository.updateLiked(superHero)
             getLikedSuperHeroesFromDataBase()
         }
     }
 
     fun updateDisliked(superHero: SuperHero) {
         viewModelScope.launch(Dispatchers.IO) {
-            heroesDao.updateDisliked(superHero)
+            heroesRepository.updateDisLiked(superHero)
             getDisLikedSuperHeroesFromDataBase()
         }
     }
 
+
     fun getLikedSuperHeroesFromDataBase() {
         viewModelScope.launch(Dispatchers.IO) {
             val likedHeroes =
-                heroesDao.getAllSuperHeroes().filter { superHero -> superHero.isLiked == true }
-            _likedSuperHeroes.postValue(likedHeroes)
+                heroesRepository.getSuperHeroesFromRoom()
+                    .filter { superHero -> superHero.isLiked == true }
+            likedSuperHeroes = likedSuperHeroes.copy(heroes = likedHeroes, loading = false)
         }
     }
 
     fun getDisLikedSuperHeroesFromDataBase() {
         viewModelScope.launch(Dispatchers.IO) {
             val disLikedHeroes =
-                heroesDao.getAllSuperHeroes().filter { superHero -> superHero.isDisLiked == true }
-            _disLikedSuperHeroes.postValue(disLikedHeroes)
+                heroesRepository.getSuperHeroesFromRoom()
+                    .filter { superHero -> superHero.isDisLiked == true }
+            disLikedSuperHeroes = disLikedSuperHeroes.copy(heroes = disLikedHeroes, loading = false)
+
         }
     }
+
 
 }

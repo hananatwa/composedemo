@@ -12,6 +12,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.compose.material.*
 import androidx.compose.ui.Modifier
+import com.example.composeexampleapp.views.details.SuperHeroDetailsScreen
+import com.example.composeexampleapp.views.dislikes.DisLikesScreen
+import com.example.composeexampleapp.views.home.BottomNavigationBar
+import com.example.composeexampleapp.views.home.SuperHeroesListScreen
+import com.example.composeexampleapp.views.likes.LikesScreen
+import com.example.composeexampleapp.model.dataclasses.Screen
 
 class MainActivity : ComponentActivity() {
 

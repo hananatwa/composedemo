@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,19 +25,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.composeexampleapp.reposatory.dataclasses.SuperHero
+import com.example.composeexampleapp.model.dataclasses.SuperHero
 @Composable
 fun HeroesScreen(
     navController: NavHostController,
     heroes: List<SuperHero>,
     emptyMessage: String,
     emptyImageRes: Int,
-    loadData: () -> Unit,
     onLongPress: (SuperHero) -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        loadData()
-    }
+
     val heroesState by rememberUpdatedState(newValue = heroes)
     var showDialog by remember { mutableStateOf(false) }
     var selectedHero by remember { mutableStateOf<SuperHero?>(null) }
@@ -68,7 +65,7 @@ fun HeroesScreen(
                     .size(150.dp)
                     .clip(RoundedCornerShape(16.dp))
             )
-            Text(text = emptyMessage, style = MaterialTheme.typography.h6)
+            Text(text = emptyMessage, style = MaterialTheme.typography.headlineMedium)
         }
     } else {
         LazyColumn(
